@@ -6,34 +6,34 @@ class Client:
         self.host = host
         self.port = port
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        
+
     def connect(self):
         try:
             self.client_socket.connect((self.host, self.port))
             print(f"Conectado ao servidor {self.host}:{self.port}")
             
-            # Thread para receber mensagens do servidor
+            # Thread para receber mensagens
             threading.Thread(target=self.receive_messages, daemon=True).start()
             
-            # Loop principal para enviar mensagens
             while True:
-                message = input()
+                message = input("Digite uma mensagem ou 'sair': ")
                 if message.lower() == 'sair':
                     break
-                self.client_socket.send(message.encode('utf-8'))
+                self.client_socket.sendall(message.encode('utf-8'))
+
         except Exception as e:
-            print(f"Erro: {e}")
+            print(f"Erro na conexão: {e}")
         finally:
             self.client_socket.close()
             print("Conexão encerrada.")
-    
+
     def receive_messages(self):
         while True:
             try:
-                message = self.client_socket.recv(1024).decode('utf-8')
-                if not message:
+                data = self.client_socket.recv(1024)
+                if not data:
                     break
-                print(f"Resposta do servidor: {message}")
+                print(f"Resposta do servidor: {data.decode('utf-8')}")
             except:
                 break
 
