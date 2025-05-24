@@ -75,18 +75,18 @@ class Server:
     def process_command(self, command, client_ip, client_port):
         cmd = command.strip()
         if cmd == "comando:1":
-            return datetime.now().strftime("Data: %Y-%m-%d")
+            return datetime.now().strftime("Data: %Y-%m-%d\n")
         elif cmd == "comando:2":
-            return datetime.now().strftime("Hora: %H:%M:%S")
+            return datetime.now().strftime("Hora: %H:%M:%S\n")
         elif cmd == "comando:3":
             return (
                 f"Servidor: {self.host}:{self.port}\n"
                 f"Cliente: {client_ip}:{client_port}\n"
-                f"Status: Conexão ativa com o servidor."
+                f"Status: Conexão ativa com o servidor.\n"
             )
         elif cmd == "comando:4":
             with self.lock:
-                return f"Clientes conectados ({len(self.connected_clients)}):\n" + "\n".join(self.connected_clients.keys())
+                return f"Clientes conectados ({len(self.connected_clients)}):\n" + "\n".join(self.connected_clients.keys()) + "\n"
         else:
             return "Comando inválido"
 
