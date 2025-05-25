@@ -1,19 +1,18 @@
 import socket
 import threading
 
-class Client:
-    def __init__(self, host='127.0.0.1', port=12345):
+class Cliente:
+    def __init__(self, host='127.0.0.1', porta=12345):
         self.host = host
-        self.port = port
+        self.porta = porta
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.running = True
 
 
     def connect(self):
         try:
-            
-            self.client_socket.connect((self.host, self.port))
-            print(f"Conectado ao servidor {self.host}:{self.port}")
+            self.client_socket.connect((self.host, self.porta))
+            print(f"Conectado ao servidor {self.host}:{self.porta}")
             
             receive_thread = threading.Thread(target=self.receber_mensagens_servidor)
             receive_thread.daemon = True
@@ -36,12 +35,12 @@ class Client:
     def receber_mensagens_servidor(self):
         while self.running:
             try:
-                data = self.client_socket.recv(1024)
-                if not data:
+                dados = self.client_socket.recv(1024)
+                if not dados:
                     self.running = False
                     break
-                print(f"\nMensagem do servidor: {data.decode('utf-8')}")
-                print("Digite uma mensagem ou 'sair': ", end='', flush=True)
+                print(f"\nMensagem do servidor: {dados.decode('utf-8')}")
+                # print("Digite uma mensagem ou 'sair': ", end='', flush=True)
             except ConnectionResetError:
                 print("\nConexão com o servidor foi resetada")
                 self.running = False
@@ -67,5 +66,5 @@ class Client:
 
 
 if __name__ == "__main__":
-    client = Client()
-    client.connect()
+    cliente = Cliente()
+    cliente.connect()
