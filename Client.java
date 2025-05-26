@@ -7,8 +7,8 @@ public class Client {
     private int porta;
     private Socket socket;
     private volatile boolean running;
-    private PrintWriter saida;
     private BufferedReader entrada;
+    private PrintWriter saida;
 
     public Client(String host, int porta) {
         this.host = host;
@@ -24,13 +24,13 @@ public class Client {
             
             System.out.println("Conectado ao servidor " + host + ":" + porta);
 
-            Thread receiveThread = new Thread(this::receberMensagens);
-            receiveThread.setDaemon(true);
-            receiveThread.start();
+            Thread recebimentoThread = new Thread(this::receberMensagens);
+            recebimentoThread.setDaemon(true);
+            recebimentoThread.start();
 
             this.enviarMensagem();
 
-            receiveThread.join();
+            recebimentoThread.join();
 
         } catch (Exception e) {
             System.err.println("Erro na conexão: " + e.getMessage());
@@ -44,12 +44,12 @@ public class Client {
     private void receberMensagens() {
         try {
             while (running) {
-                String message = entrada.readLine();
-                if (message == null) { // Servidor fechou a conexão
+                String mensagem = entrada.readLine();
+                if (mensagem == null) { 
                     running = false;
                     break;
                 }
-                System.out.println("\nMensagem do servidor: " + message);
+                System.out.println("\nMensagem do servidor: " + mensagem);
             }
         } catch (SocketException e) {
             if (running) {
