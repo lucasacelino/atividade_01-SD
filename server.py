@@ -43,6 +43,7 @@ class Servidor:
                     print(f"Conexão estabelecida com {ip}:{port}. Total: {len(self.clientes_conectados)}")
 
                 threading.Thread(target=self.handle_client, args=(client_socket, client_address), daemon=True).start()
+                
 
         except KeyboardInterrupt:
             print("\nServidor encerrando...")
@@ -56,16 +57,16 @@ class Servidor:
 
         try:
             while True:
-                message = client_socket.recv(1024).decode('utf-8')
-                if not message:
+                mensagem = client_socket.recv(1024).decode('utf-8')
+                if not mensagem:
                     break
 
-                print(f"[{ip}:{port}] Mensagem: {message}")
+                print(f"[{ip}:{port}] Mensagem: {mensagem}")
 
-                if message.startswith("comando:"):
-                    response = self.comandos_especiais(message, ip, port)
+                if mensagem.startswith("comando:"):
+                    response = self.comandos_especiais(mensagem, ip, port)
                 else:
-                    response = f"Echo: {message}"
+                    response = f"Mensagem: {mensagem}"
 
                 client_socket.send(response.encode('utf-8'))
 
